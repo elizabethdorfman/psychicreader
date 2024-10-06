@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+		<script>
+		async function on_button_click(){
+			const loading = document.getElementById("loading");
+      loading.style.display = "block";
+			const response = await fetch("http://localhost:8080/gpt_response", { method: 'GET' });
+			const text = await response.text()
+			prediction = document.getElementById("prediction");
+			prediction.innerHTML = text
+			loading.style.display = "none";
+		}
+		</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Psychic</title>
+		<style>
+			/* Style for the loading text */
+			#loading {
+					display: none;
+					font-size: 18px;
+					color: #555;
+			}
+			/* Apply flexbox to the body to center all content */
+        body {
+						background-image: url('https://lightcode-alchemy.com/wp-content/uploads/2019/12/2020-january_1500x926.jpg');
+            background-size: cover; /* Makes the image cover the entire background */
+            background-repeat: no-repeat; /* Ensures the image doesn't repeat */
+            background-position: center; /* Centers the background image */
+            height: 100vh; /* Ensures the body takes full viewport height */
+            margin: 0; /* Removes default margin */
+
+						display: flex;
+            flex-direction: column; /* Stack items vertically */
+            justify-content: center; /* Center vertically */
+            align-items: center; /* Center horizontally */
+            height: 100vh; /* Full viewport height */
+            margin: 50; /* Remove default body margin */
+        }
+				/* Center text inside elements */
+				body * {
+            text-align: center;
+        }
+
+	</style>
+</head>
+<body>
+    <h1>Talk to the Psychic</h1>
+
+    <!-- Form that submits a GET request to the Flask backend -->
+        <button type="submit" onclick="on_button_click()">Click For Your Future</button>
+
+				<p id="loading">Psychic is thinking...</p>
+
+				<p id ="prediction"></p>
+</body>
+</html>
