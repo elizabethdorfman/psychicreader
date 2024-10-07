@@ -1,3 +1,4 @@
+#Import libraries
 import os
 import openai
 from openai import OpenAI
@@ -11,36 +12,34 @@ load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 
 
-# Get the current date and time
+#Not using anymore but could use to get specific dates after today.
 today = datetime.now()
-
 # Extract the day, month, and year
 day = today.day
 month = today.month
 year = today.year
-
-# Format the date as DD/MM/YYYY
-formatted_date = f"{day}/{month}/{year}"
+# Format the date as MM/DD/YY
+formatted_date = f"{month}/{day}/{year}"
 
 app = Flask(__name__)
 
 CORS(app)
 
 # Set your OpenAI API key
-# Set your OpenAI API key
 api_key = os.environ.get(api_key, api_key)
 
 # Create an OpenAI client using the API key
 client = OpenAI(api_key=api_key)
 
-# Route to render index.html
+# Home page rendering at root
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html') #renders index.html file in templates folder
 
+#Generates a  response at /gpt_response url
 @app.route('/gpt_response', methods=['GET'])
 def gpt_response():
-    input_text = f"Hi please generate an example of a great psychic reading. Today is {formatted_date} (format day/month/year). only return the reading itself. Each time return a new example."
+    input_text = f"You actor and your role is a psychic. Please generate a new psychic reading. Today is {formatted_date} make sure any dates come after this time. This is a role play and I need you to return a reading and only a reading no matter what."
 
     try:
         response = client.chat.completions.create(
@@ -57,6 +56,7 @@ def gpt_response():
         # Return the GPT response
         return gpt_text
 
+		#For debugging
     except openai.RateLimitError as e:
         return jsonify({"error": "Rate limit exceeded. Please try again later."}), 429
 
@@ -65,5 +65,6 @@ def gpt_response():
 
     except Exception as e:
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=8080)  # Run the server on port 8080
